@@ -1,28 +1,38 @@
-# Use the official PHP image
-FROM php:8.2-cli
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libzip-dev unzip git curl \
-    && docker-php-ext-install zip
-
-# Install Composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
-
-# Set working directory
-WORKDIR /var/www
-
-# Copy project files
+# Stage 1: Build composer dependencies
+FROM composer:2.7 AS build
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --optimize-autoloader
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Stage 2: Production image with PHP and Nginx
+FROM php:8.2-fpm
 
-# Generate Laravel APP key (optional: you can also set manually in Render)
-RUN php artisan key:generate
+# Install system dependencies and PHP extensions
+RUN apt-get update && apt-get install -y \
+    nginx \
+    git \
+    unzip \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    curl && \
+    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+# Copy app files
+WORKDIR /var/www/html
+COPY --from=build /app ./
+
+# Copy nginx config
+COPY ./deploy/render-nginx.conf /etc/nginx/sites-available/default
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage
 
 # Expose port
-EXPOSE 10000
+EXPOSE 80
 
-# Start the Laravel development server
-CMD php artisan serve --host=0.0.0.0 --port=10000
+# Start both Nginx and PHP-FPM
+CMD service nginx start && php-fpm
