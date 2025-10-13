@@ -39,6 +39,6 @@ RUN chown -R www-data:www-data /var/www/html \
 EXPOSE 80
 
 # Start both Nginx and PHP-FPM
-CCOPY ./deploy/start.sh /start.sh
+COPY ./deploy/start.sh /start.sh
 RUN chmod +x /start.sh
 CMD ["/start.sh"]
