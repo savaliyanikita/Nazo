@@ -1,14 +1,18 @@
 # Stage 1: Build composer dependencies
 FROM composer:2.7 AS build
 WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --optimize-autoloader
+
+# Copy full application first (not just composer.json)
 COPY . .
 
-# Stage 2: Production image with PHP and Nginx
+# Install dependencies (no dev packages)
+RUN composer install --no-dev --no-interaction --optimize-autoloader
+
+
+# Stage 2: Production image with PHP + Nginx
 FROM php:8.2-fpm
 
-# Install system dependencies and PHP extensions
+# Install system dependencies & PHP extensions
 RUN apt-get update && apt-get install -y \
     nginx \
     git \
@@ -20,8 +24,9 @@ RUN apt-get update && apt-get install -y \
     curl && \
     docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Copy app files
 WORKDIR /var/www/html
+
+# Copy built app from previous stage
 COPY --from=build /app ./
 
 # Copy nginx config
@@ -31,7 +36,6 @@ COPY ./deploy/render-nginx.conf /etc/nginx/sites-available/default
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage
 
-# Expose port
 EXPOSE 80
 
 # Start both Nginx and PHP-FPM
