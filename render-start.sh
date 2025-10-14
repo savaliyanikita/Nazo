@@ -25,7 +25,7 @@ fi
 
 # Optimize for production
 php artisan config:cache
-php artisan route:cache
+# php artisan route:cache
 php artisan view:cache
 
 echo "✅ Laravel setup complete. Starting services..."
