@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Category;
 use App\Support\CartResolver;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
