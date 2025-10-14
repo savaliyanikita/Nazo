@@ -2,6 +2,9 @@
 FROM composer:2.7 AS build
 WORKDIR /app
 
+# Make the startup script executable
+RUN chmod +x /var/www/html/render-start.sh
+
 # Copy full application first (not just composer.json)
 COPY . .
 
