@@ -94,10 +94,10 @@ Route::middleware('auth')->prefix('account')->name('account.')->group(function (
 
 
 // Verify link (auto sent by Laravel)
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('/home');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//     $request->fulfill();
+//     return redirect('/home');
+// })->middleware(['auth', 'signed'])->name('verification.verify');
 
 // Resend verification
 Route::post('/email/verification-notification', function (Request $request) {
