@@ -142,6 +142,7 @@ Route::get('/my-orders', [OrderController::class, 'index'])->name('orders.index'
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
 Route::delete('/wishlist/remove/{item}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::post('/product/review', [ProductReviewController::class, 'store'])->name('product.review.store');
 
 
 Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect'])
