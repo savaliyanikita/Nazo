@@ -1,33 +1,35 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
-# Navigate to project root
-cd /var/www/html
+echo "🚀 Starting Laravel setup ..."
 
-echo "🔧 Running Laravel setup tasks..."
+# Ensure key exists
+if [ -z "$APP_KEY" ]; then
+  echo "⚙️ Generating APP_KEY ..."
+  php artisan key:generate --force
+fi
 
-# Fix permissions
-chown -R www-data:www-data storage bootstrap/cache
-chmod -R 775 storage bootstrap/cache
-
-# Clear and rebuild Laravel caches
-php artisan config:clear || true
-php artisan cache:clear || true
-php artisan route:clear || true
-php artisan view:clear || true
-
-# Ensure app key exists (skip if already set)
-php artisan key:generate --force || true
+# Clear caches
+php artisan config:clear
+php artisan route:clear
+php artisan cache:clear
 
 # Run database migrations
-php artisan migrate --force || true
+echo "📦 Running migrations..."
+php artisan migrate --force || echo "⚠️ Migration failed or already up to date."
 
-# Link storage
-php artisan storage:link || true
+# Link storage if not linked
+if [ ! -L "public/storage" ]; then
+  php artisan storage:link || true
+fi
 
 # Optimize for production
-php artisan optimize || true
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 
-echo "✅ Laravel setup complete — starting Nginx and PHP-FPM..."
+echo "✅ Laravel setup complete. Starting services..."
+
+# Start PHP-FPM and Nginx
 service nginx start
 php-fpm

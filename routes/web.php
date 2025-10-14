@@ -189,13 +189,4 @@ Route::post('/auth/check-email', [AuthController::class, 'checkEmail'])->name('a
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/signup', [AuthController::class, 'signup'])->name('auth.signup');
 
-Route::get('/db-test', function () {
-    try {
-        \DB::connection()->getPdo();
-        return '✅ Database connection successful!';
-    } catch (\Exception $e) {
-        return '❌ Connection failed: ' . $e->getMessage();
-    }
-});
-
 require __DIR__.'/auth.php';
