@@ -94,10 +94,15 @@ Route::middleware('auth')->prefix('account')->name('account.')->group(function (
 
 
 // Verify link (auto sent by Laravel)
-Route::get('/email/verify-email/{id}/{hash}', function (EmailVerificationRequest $request) {
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect('/home');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('/email/verify-email/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify-email');
 
 // Resend verification
 Route::post('/email/verification-notification', function (Request $request) {
@@ -116,8 +121,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 //Product Page
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
-Route::post('/product/review', [ProductReviewController::class, 'store'])->name('product.review.store');
-
 // Cart Page
 Route::get('/cart',        [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
