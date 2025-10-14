@@ -1,18 +1,19 @@
+# ==============================
 # Stage 1: Build composer dependencies
+# ==============================
 FROM composer:2.7 AS build
 WORKDIR /app
 
-# Make the startup script executable
-RUN chmod +x /var/www/html/render-start.sh
-
-# Copy full application first (not just composer.json)
+# Copy full application first
 COPY . .
 
 # Install dependencies (no dev packages)
 RUN composer install --no-dev --no-interaction --optimize-autoloader
 
 
-# Stage 2: Production image with PHP + Nginx
+# ==============================
+# Stage 2: Production image (PHP + Nginx)
+# ==============================
 FROM php:8.2-fpm
 
 # Install system dependencies & PHP extensions
@@ -35,13 +36,15 @@ COPY --from=build /app ./
 # Copy nginx config
 COPY ./deploy/render-nginx.conf /etc/nginx/sites-available/default
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+# ✅ Grant permissions *after* file exists in this stage
+RUN chmod +x /var/www/html/render-start.sh && \
+    chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html/storage
 
 EXPOSE 80
 
 # Start both Nginx and PHP-FPM
 COPY ./deploy/start.sh /start.sh
 RUN chmod +x /start.sh
+
 CMD ["/start.sh"]
