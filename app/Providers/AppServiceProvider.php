@@ -24,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
+
         // Share categories + cart count with all views
         View::composer('*', function ($view) {
             // Cache categories to avoid hitting DB every time
