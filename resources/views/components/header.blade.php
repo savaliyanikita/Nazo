@@ -180,37 +180,21 @@
   </div>
 <!-- Header Top Row -->
 <header>
-  <div class="container-lg bg-white border-b">
-    <div class="row py-4 max-w-screen-xl flex flex-wrap items-center justify-between px-4">
+  <div class="container-lg bg-white border-b ">
+    <div class="row py-4 max-w-screen-xl flex flex-wrap items-center justify-between px-4 d-none d-lg-flex">
 
-      <!-- Logo -->
-      <div class="col-sm-6 col-md-5 col-lg-3 justify-content-center justify-content-lg-between text-center text-sm-start d-flex gap-3">
+      <!-- Logo -->      
+      <div class="col-sm-6 col-md-5 col-lg-3 justify-content-center justify-content-lg-between text-center text-sm-start  gap-3">
           <div class="d-flex align-items-center">
             <a href="{{ route('home') }}">
               <img src="{{ asset('images/logo.png') }}" alt="logo" class="img-fluid">
             </a>
-            <button class="navbar navbar-toggler d-block d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <!-- <button class="navbar navbar-toggler d-block d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> -->
           </div>
       </div>
-
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <ul class="navbar-nav">
-            @foreach ($categories as $category)
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a>
-            </li>
-            @endforeach
-          </ul>
-        </div>
-      </div>
-
+      
       <!-- Search Bar -->
       <div class="col-sm-8 col-md-3 col-lg-5 d-none d-md-block" >
           <div class="search-bar row justify-content-between bg-light p-2 rounded-4">
@@ -226,72 +210,62 @@
             </div>
           </div>
       </div>
-
         <!-- Icon -->
- <div class="col-sm-6 col-md-3 col-lg-2 d-flex mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
-  <ul class="d-flex list-unstyled m-0 gap-3 justify-content-center justify-content-sm-end align-items-center">
-    
-    @guest
-      {{-- Not Logged In --}}
-      <li>
-        <a href="#" onclick="event.preventDefault(); showAuth('signin'); return false;" class="p-2 mx-1">
-          <svg width="24" height="24"><use xlink:href="#user"></use></svg>
-        </a>
-      </li>
-    @endguest
-
-    @auth
-      {{-- Logged In Dropdown --}}
-      <li class="dropdown">
-        <a href="#" class="p-2 mx-1 dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-          <svg width="24" height="24"><use xlink:href="#user"></use></svg>
-          <span class="ms-2 user-name">Hi, {{ \Illuminate\Support\Str::limit(Auth::user()->name, 6, '...') }}</span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end shadow-sm p-2" style="min-width:220px;">
-          <li class="px-3 py-2">
-            <strong>Hello, {{ Auth::user()->name }}!</strong><br>
-            <small class="text-muted">Welcome back!</small>
+      <div class="col-sm-6 col-md-3 col-lg-2 d-flex mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
+        <ul class="d-flex list-unstyled m-0 gap-3 justify-content-center justify-content-sm-end align-items-center">
+          @guest
+            {{-- Not Logged In --}}
+            <li>
+              <a href="#" onclick="event.preventDefault(); showAuth('signin'); return false;" class="p-2 mx-1">
+                <svg width="24" height="24"><use xlink:href="#user"></use></svg>
+              </a>
+            </li>
+          @endguest
+          @auth
+            {{-- Logged In Dropdown --}}
+            <li class="dropdown">
+              <a href="#" class="p-2 mx-1 dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                <svg width="24" height="24"><use xlink:href="#user"></use></svg>
+                <span class="ms-2 user-name">Hi, {{ \Illuminate\Support\Str::limit(Auth::user()->name, 6, '...') }}</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm p-2" style="min-width:220px;">
+                <li class="px-3 py-2">
+                  <strong>Hello, {{ Auth::user()->name }}!</strong><br>
+                  <small class="text-muted">Welcome back!</small>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a href="{{ route('account.orders') }}" class="dropdown-item"><i class="bi bi-bag-check me-2"></i>Order History</a></li>
+                <li><a href="{{ route('account.wishlist') }}" class="dropdown-item"><i class="bi bi-bag-check me-2"></i>My Wishlist</a></li>
+                <li>
+                  <form action="{{ route('logout') }}" method="POST" class="m-0">
+                    @csrf
+                    <button type="submit" class="dropdown-item text-danger">
+                      <i class="bi bi-box-arrow-right me-2"></i> Sign Out
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          @endauth
+          {{-- Cart --}}
+          <li class="position-relative">
+            <a href="#" class="p-2 mx-1 d-flex align-items-center justify-content-center rounded-circle hover-bg-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+              <svg width="24" height="24"><use xlink:href="#shopping-bag"></use></svg>
+              <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+                {{ auth()->check() ? Auth::user()->cartItemCount(true) : (session('cart_count', 0)) }}
+                <!-- {{ $cartCount }} -->
+              </span>
+            </a>
           </li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a href="{{ route('account.orders') }}" class="dropdown-item"><i class="bi bi-bag-check me-2"></i>Order History</a></li>
-          <li><a href="{{ route('account.wishlist') }}" class="dropdown-item"><i class="bi bi-bag-check me-2"></i>My Wishlist</a></li>
-          <li>
-            <form action="{{ route('logout') }}" method="POST" class="m-0">
-              @csrf
-              <button type="submit" class="dropdown-item text-danger">
-                <i class="bi bi-box-arrow-right me-2"></i> Sign Out
-              </button>
-            </form>
+          {{-- Mobile search --}}
+          <li class="d-md-none">
+            <a href="#" class="p-2 mx-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
+              <svg width="24" height="24"><use xlink:href="#search"></use></svg>
+            </a>
           </li>
         </ul>
-      </li>
-    @endauth
-
-    {{-- Cart --}}
-    <li class="position-relative">
-      <a href="#" class="p-2 mx-1 d-flex align-items-center justify-content-center rounded-circle hover-bg-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-        <svg width="24" height="24"><use xlink:href="#shopping-bag"></use></svg>
-        <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
-          {{ auth()->check() ? Auth::user()->cartItemCount(true) : (session('cart_count', 0)) }}
-          <!-- {{ $cartCount }} -->
-        </span>
-      </a>
-    </li>
-
-    {{-- Mobile search --}}
-    <li class="d-md-none">
-      <a href="#" class="p-2 mx-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
-        <svg width="24" height="24"><use xlink:href="#search"></use></svg>
-      </a>
-    </li>
-
-  </ul>
-</div>
-
-
-
-    </div>
-   
+      </div>
+    </div> 
         <!-- Scrollable Category Bar -->
     <div class="relative bg-white hidden sm:block">
       <button id="scroll-left" class="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 z-10 px-3 py-2 text-xl text-gray-500 hover:text-yellow-600">
@@ -321,6 +295,66 @@
       </button>
     </div>
   </div>
+   <!-- Mobile Header -->
+    <div class="d-flex d-lg-none justify-content-between align-items-center py-2 px-3 border-bottom bg-white">
+
+      <!-- Left: Hamburger -->
+      <button class="navbar-toggler border-0 bg-transparent" type="button"
+          data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+          aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+          <svg width="26" height="26" fill="currentColor">
+              <use xlink:href="#menu"></use>
+          </svg>
+      </button>
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav">
+            @foreach ($categories as $category)
+            <li class="nav-item">
+              <a class="nav-link" href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a>
+            </li>
+            @endforeach
+          </ul>
+        </div>
+      </div>
+      <!-- Center: Logo -->
+      <a href="{{ route('home') }}" class="text-center flex-grow-1">
+        <img src="{{ asset('images/logo.png') }}" alt="logo" class="img-fluid mx-auto" style="max-height: 55px;">
+      </a>
+
+      <!-- Right: 3 icons (user, cart, search) -->
+      <div class="d-flex align-items-center gap-3">
+        <!-- User -->
+        @guest
+          <a href="#" onclick="event.preventDefault(); showAuth('signin'); return false;">
+            <svg width="22" height="22"><use xlink:href="#user"></use></svg>
+          </a>
+        @endguest
+
+        @auth
+          <a href="{{ route('account.orders') }}">
+            <svg width="22" height="22"><use xlink:href="#user"></use></svg>
+          </a>
+        @endauth
+
+        <!-- Cart -->
+        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" class="position-relative">
+          <svg width="22" height="22"><use xlink:href="#shopping-bag"></use></svg>
+          <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark" style="font-size:10px;">
+            {{ auth()->check() ? Auth::user()->cartItemCount(true) : (session('cart_count', 0)) }}
+          </span>
+        </a>
+
+        <!-- Search -->
+        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
+          <svg width="22" height="22"><use xlink:href="#search"></use></svg>
+        </a>
+      </div>
+    </div>
 </header>
 <script>
 document.addEventListener('DOMContentLoaded', function () {

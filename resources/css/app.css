@@ -29,3 +29,9 @@
     font-size: 3.25rem;
     line-height: 3.5rem;
 }
+.h-\[400px\] {
+    height: 400px;
+}
+.hero-swiper .swiper-slide {
+  max-height: 400px;
+}

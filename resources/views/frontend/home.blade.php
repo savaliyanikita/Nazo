@@ -8,7 +8,7 @@
 
       <!-- Slide 1 -->
       <div class="swiper-slide">
-        <div class="relative h-[500px] bg-cover bg-center" style="background-image: url('{{ asset('images/slider1.jpg') }}')">
+        <div class="relative h-[400px] bg-cover bg-center" style="background-image: url('{{ asset('images/slider1.jpg') }}')">
           <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
             <p class="text-4xl font-bold mb-4">Premium Wholesale Dry Fruits</p>
             <p class="mb-4 fs-4">Best Quality · Direct from Source · Reliable Supply</p>
@@ -16,18 +16,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Slide 2 -->
-      <div class="swiper-slide">
-        <div class="relative h-[500px] bg-cover bg-center" style="background-image: url('{{ asset('images/slider2.jpg') }}')">
-          <div class="absolute inset-0 bg-black/30 flex flex-col justify-center items-center text-white text-center px-4">
-            <h2 class="text-4xl font-bold mb-4">Direct from Farmers</h2>
-            <p class="mb-4">Fresh · Affordable · Seasonal</p>
-            <a href="#" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded">Browse</a>
-          </div>
-        </div>
-      </div>
-
     </div>
 
     <!-- Navigation -->
@@ -40,11 +28,10 @@
 <!-- Feature Scroll Bar -->
 <div class="relative overflow-hidden bg-gray-900 text-white py-6">
   <!-- Marquee container with custom animation -->
-  <!-- <div class="marquee-track flex gap-[12rem] animate-marquee scroll-smooth"> -->
-  <div class="marquee-track flex gap-[12rem] scroll-smooth">
+  <div class="marquee-track flex gap-[12rem] animate-marquee scroll-smooth">
     
     <!-- Loop Items TWICE for seamless effect -->
-    <!-- @for ($i = 0; $i < 2; $i++) -->
+    @for ($i = 0; $i < 2; $i++)
       @foreach ([
         ['icon' => 'globe-americas', 'title' => 'Global Sourcing', 'desc' => 'Local Distribution'],
         ['icon' => 'star', 'title' => 'Premium Quality', 'desc' => ''],
@@ -59,7 +46,7 @@
           @endif
         </div>
       @endforeach
-    <!-- @endfor -->
+    @endfor
 
   </div>
 </div>
