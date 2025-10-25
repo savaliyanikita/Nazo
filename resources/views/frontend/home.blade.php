@@ -40,10 +40,11 @@
 <!-- Feature Scroll Bar -->
 <div class="relative overflow-hidden bg-gray-900 text-white py-6">
   <!-- Marquee container with custom animation -->
-  <div class="marquee-track flex gap-[12rem] animate-marquee scroll-smooth">
+  <!-- <div class="marquee-track flex gap-[12rem] animate-marquee scroll-smooth"> -->
+  <div class="marquee-track flex gap-[12rem] scroll-smooth">
     
     <!-- Loop Items TWICE for seamless effect -->
-    @for ($i = 0; $i < 2; $i++)
+    <!-- @for ($i = 0; $i < 2; $i++) -->
       @foreach ([
         ['icon' => 'globe-americas', 'title' => 'Global Sourcing', 'desc' => 'Local Distribution'],
         ['icon' => 'star', 'title' => 'Premium Quality', 'desc' => ''],
@@ -58,7 +59,7 @@
           @endif
         </div>
       @endforeach
-    @endfor
+    <!-- @endfor -->
 
   </div>
 </div>
